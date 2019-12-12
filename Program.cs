@@ -52,15 +52,18 @@ namespace StudentExercise
             //QUERY ALL THE STUDENTS WITH THE COHORTS NAMES AND EXERCISES
 
 
-            Console.WriteLine("");
-            Console.WriteLine("Getting All the Students:");
-            Console.WriteLine("-------------------------");
-
-            List<Student> allStudents = exerciseRepository.GetAllStudents();
-
-            foreach (Student stu in allStudents)
+            List<Student> studentsWithExercises = exerciseRepository.GetAllStudents();
+            foreach (Student stud in studentsWithExercises)
             {
-                Console.WriteLine($"{stu.Id}: {stu.FirstName} {stu.LastName}, Slach: {stu.SlackHandle}. Study in {stu.CohortName}");
+                Console.WriteLine("__________________________________________________");
+                Console.WriteLine($"Student:{stud.Id}: {stud.FirstName} {stud.LastName}. Slack: {stud.SlackHandle}");
+                Console.WriteLine($"Cohort:{stud.CohortId.Name}");
+                Console.WriteLine($"Assignments: {stud.Exercises.Count}");
+                foreach (Exercise exer in stud.Exercises)
+                {
+                    Console.WriteLine($"Exercise: {exer.Name} Language: {exer.Language}");
+                }
+
             }
 
             //ADDING MORE EXERCISES

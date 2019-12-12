@@ -6,7 +6,7 @@ namespace StudentExercise.Models
 {
     class Student
     {
-        /*
+        
         public Student(int id, string firstName, string lastname, string slack)
         {
             Id = id;
@@ -23,7 +23,7 @@ namespace StudentExercise.Models
             SlackHandle = slack;
             CohortId = cohort;
         }
-        */
+        
 
         public int Id { get; set; }
         public string FirstName { get; set; }
@@ -33,7 +33,7 @@ namespace StudentExercise.Models
 
         public string CohortName { get; set; }
 
-        public List<StudentExercises> Exercises;
+        public List<Exercise> Exercises { get; set; }
     }
 }
 
