@@ -31,7 +31,6 @@ namespace StudentExercise.Models
         public string SlackHandle { get; set; }
         public Cohort CohortId { get; set; }
 
-        public string CohortName { get; set; }
 
         public List<Exercise> Exercises { get; set; }
     }

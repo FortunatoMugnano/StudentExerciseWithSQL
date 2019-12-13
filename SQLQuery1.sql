@@ -1,6 +1,12 @@
 ﻿
 
-SELECT Student.Id, Student.FirstName, Student.LastName, Student.SlackHandle, Student.CohortId, Cohort.Id, Cohort.Name
-FROM Student 
-LEFT JOIN  StudentExercise ON Student.Id = StudentExercise.Id
-RIGHT JOIN Cohort On Student.CohortId = Cohort.Id
+SELECT s.Id, s.FirstName, s.LastName, s.SlackHandle, s.CohortId, c.Name AS CohortName, +
+e.Id AS ExerciseId, e.Language, e.Name
+FROM Student s
+INNER JOIN Cohort c On s.CohortId = c.Id
+INNER JOIN StudentExercise se ON se.StudentId = s.Id
+INNER JOIN Exercise e ON se.ExerciseId = e.Id
+
+
+
+

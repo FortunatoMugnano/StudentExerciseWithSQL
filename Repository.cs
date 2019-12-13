@@ -241,20 +241,14 @@ namespace StudentExercise
 
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                   
 
-                    cmd.CommandText = "SELECT" +
-                        " Student.Id," +
-                        " Student.FirstName," +
-                        " Student.LastName, " +
-                        " Student.SlackHandle," +
-                        " Student.CohortId," +
-                        " Cohort.Id," +
-                        " Cohort.Name" +
-                        " FROM Student " +
-                        " LEFT JOIN  StudentExercise ON Student.Id = StudentExercise.Id" +
-                        " RIGHT JOIN Cohort On Student.CohortId = Cohort.Id";
 
+                    cmd.CommandText = @"SELECT s.Id, s.FirstName, s.LastName, s.SlackHandle, s.CohortId, c.Name AS CohortName, +
+                                        e.Id AS ExerciseId, e.Language, e.Name
+                                        FROM Student s
+                                        INNER JOIN Cohort c On s.CohortId = c.Id
+                                        INNER JOIN StudentExercise se ON se.StudentId = s.Id
+                                        INNER JOIN Exercise e ON se.ExerciseId = e.Id";
 
 
 
@@ -274,40 +268,27 @@ namespace StudentExercise
                         string lastNameValue = reader.GetString(lastNameColumnPosition);
                         int slackHandleColumnPosition = reader.GetOrdinal("SlackHandle");
                         string slackHandleValue = reader.GetString(slackHandleColumnPosition);
-                        int cohortsIdColumnPosition = reader.GetOrdinal("id");
+                        int cohortsIdColumnPosition = reader.GetOrdinal("CohortId");
                         int cohortsId = reader.GetInt32(cohortsIdColumnPosition);
-                        int cohortsNameColumnPosition = reader.GetOrdinal("Name");
+                        int cohortsNameColumnPosition = reader.GetOrdinal("CohortName");
                         string cohortsName = reader.GetString(cohortsNameColumnPosition);
+                        int exerciseIdColumnPosition = reader.GetOrdinal("ExerciseId");
+                        int exerciseId = reader.GetInt32(exerciseIdColumnPosition);
+                        int exerciseNameColumnPosition = reader.GetOrdinal("Name");
+                        string exerciseName = reader.GetString(exerciseNameColumnPosition);
+                        int exerciseLanguageColumnPosition = reader.GetOrdinal("Language");
+                        string exerciseLanguage = reader.GetString(exerciseLanguageColumnPosition);
 
                         Cohort newCohort = new Cohort(cohortsId, cohortsName);
                         Student newStudent = new Student(idValue, firstNameValue, lastNameValue, slackHandleValue, newCohort);
+                        List<Exercise> exercises = new List<Exercise>();
+                        Exercise newExercise = new Exercise(exerciseId, exerciseName, exerciseLanguage);
+                        exercises.Add(newExercise);
 
 
-                        using (SqlCommand exercisescmd = conn.CreateCommand())
-                        {
-                            List<Exercise> exercises = new List<Exercise>();
-                            exercisescmd.CommandText = "SELECT exercise.Id, exercise.Name, exercise.Language " +
-                                "FROM exercise " +
-                                "INNER JOIN studentexercise ON exercise.id = studentexercises.exerciseId " +
-                                "WHERE studentexercise.studentId = @studentId AND studentexercise.exerciseId IS NOT NULL";
-                            exercisescmd.Parameters.Add(new SqlParameter("@studentId", idValue));
-                            SqlDataReader exercisereader = exercisescmd.ExecuteReader();
-                            while (exercisereader.Read())
-                            {
-
-                                int exerciseIdColumnPosition = exercisereader.GetOrdinal("Id");
-                                int exerciseId = exercisereader.GetInt32(exerciseIdColumnPosition);
-                                int exerciseNameColumnPosition = exercisereader.GetOrdinal("Name");
-                                string exerciseName = exercisereader.GetString(exerciseNameColumnPosition);
-                                int exerciseLanguageColumnPosition = exercisereader.GetOrdinal("Language");
-                                string exerciseLanguage = exercisereader.GetString(exerciseLanguageColumnPosition);
-
-                                Exercise newExercise = new Exercise(exerciseId, exerciseName, exerciseLanguage);
-                                exercises.Add(newExercise);
-                            }
-                            exercisereader.Close();
-                            newStudent.Exercises = exercises;
-                        }
+                       
+                        newStudent.Exercises = exercises;
+                       
 
 
 

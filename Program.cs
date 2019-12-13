@@ -55,7 +55,7 @@ namespace StudentExercise
             List<Student> studentsWithExercises = exerciseRepository.GetAllStudents();
             foreach (Student stud in studentsWithExercises)
             {
-                Console.WriteLine("__________________________________________________");
+                Console.WriteLine("-------------------------");
                 Console.WriteLine($"Student:{stud.Id}: {stud.FirstName} {stud.LastName}. Slack: {stud.SlackHandle}");
                 Console.WriteLine($"Cohort:{stud.CohortId.Name}");
                 Console.WriteLine($"Assignments: {stud.Exercises.Count}");
